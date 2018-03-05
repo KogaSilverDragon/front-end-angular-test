@@ -1,10 +1,24 @@
 import { Component } from '@angular/core';
+import {UserService} from "./user.service";
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'app';
+
+  constructor(private userService: UserService) {}
+
+  ngOnInit() {
+  }
+}
+
+export interface User {
+  id: number;
+  firstName: string;
+  lastName: string;
+  age: number;
+  description: string;
+  selected?: boolean;
 }

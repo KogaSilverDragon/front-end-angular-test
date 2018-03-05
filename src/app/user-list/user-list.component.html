@@ -1,0 +1,36 @@
+<label for="user-filter">Filter by name</label>
+<input id ="user-filter"
+       type="text"
+       (input)="filterUsers()"
+       [(ngModel)]="filterName"/>
+<button type="button"
+        (click)="deleteSelectedUsers()"
+        [disabled]="!hasSelectedUsers()">Delete selected</button>
+<button type="button"
+        (click)="download()"
+        [disabled]="!hasSelectedUsers()">Download</button>
+
+<table class="user-list">
+  <tr class="user-list-header">
+    <th>
+      <input type="checkbox"
+             [(ngModel)]="selectAll"
+             (click)="toggleSelectAll()"/>
+    </th>
+    <th>Name</th>
+    <th>Actions</th>
+  </tr>
+  <tr class="user-list-row"
+      *ngFor="let user of userList$ | async">
+    <td>
+      <input type="checkbox"
+             (change)="updateSelectAll()"
+             [(ngModel)]="user.selected"/>
+    </td>
+    <td>{{user.firstName}} {{user.lastName}}</td>
+    <td>
+      <span class="user-action" (click)="showUser(user)">Show</span> |
+      <span class="user-action" (click)="deleteUser(user)">Delete</span>
+    </td>
+  </tr>
+</table>
