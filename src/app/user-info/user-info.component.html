@@ -1,20 +1,130 @@
-<h2>User information</h2>
+<div class="container my-4">
+  <div class="bd-example-container-header mb-4">
+    <h2>User information</h2>
+  </div>
+  <div class="bd-example-container-body"
+       *ngIf="!userForm">
+    <ul class="list-unstyled">
+      <li class="user-data-item">
+        <strong>First name:</strong>
+        {{user?.firstName}}
+      </li>
+      <li class="user-data-item">
+        <strong>Last name:</strong>
+        {{user?.lastName}}
+      </li>
+      <li class="user-data-item">
+        <strong>Age:</strong>
+        {{user?.age}}
+      </li>
+      <li class="user-data-item">
+        <strong>Description:</strong>
+        {{user?.description}}
+      </li>
+    </ul>
+  </div>
 
-<ul id="user-data">
-  <li class="user-data-item">
-    <strong>First name:</strong>
-    {{user?.firstName}}
-  </li>
-  <li class="user-data-item">
-    <strong>Last name:</strong>
-    {{user?.lastName}}
-  </li>
-  <li class="user-data-item">
-    <strong>Age:</strong>
-    {{user?.age}}
-  </li>
-  <li class="user-data-item">
-    <strong>First name:</strong>
-    {{user?.description}}
-  </li>
-</ul>
+  <div class="bd-example-container-body"
+       *ngIf="userForm">
+    <form [formGroup]="userForm">
+      <div class="form-group">
+        <label for="firstname">First name:</label>
+        <input id="firstname"
+               class="form-control"
+               type="text"
+               placeholder="First name"
+               formControlName="firstName"
+        />
+        <div *ngIf="userForm.get('firstName').errors?.required">This field is required.</div>
+        <div *ngIf="userForm.get('firstName').errors?.minlength">
+          The first name must be at least 2 characters long.
+        </div>
+        <div *ngIf="userForm.get('firstName').errors?.maxlength">
+          The last name can't have more than 100 characters.
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="lastname">Last name:</label>
+        <input id="lastname"
+               class="form-control"
+               type="text"
+               placeholder="Last name"
+               formControlName="lastName"
+        />
+        <div *ngIf="userForm.get('lastName').errors?.required">This field is required.</div>
+        <div *ngIf="userForm.get('lastName').errors?.minlength">
+          The last name must be at least 2 characters long.
+        </div>
+        <div *ngIf="userForm.get('lastName').errors?.maxlength">
+          The last name can't have more than 100 characters.
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="age">Age:</label>
+        <input id="age"
+               class="form-control"
+               type="number"
+               placeholder="Age"
+               formControlName="age"
+               min="1"
+               max="200"
+        />
+        <div *ngIf="userForm.get('age').errors?.required">This field is required.</div>
+        <div *ngIf="userForm.get('age').errors?.min">
+          The age can't be lesser than one.
+        </div>
+        <div *ngIf="userForm.get('age').errors?.max">
+          The age can't be higher than 200.
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="description">Description:</label>
+        <textarea id="description"
+                  class="form-control"
+                  cols="6"
+                  rows="6"
+                  placeholder="Description"
+                  formControlName="description"
+        ></textarea>
+        <div *ngIf="userForm.get('description').errors?.required">This field is required.</div>
+        <div *ngIf="userForm.get('description').errors?.minlength">
+          The description requires at least 50 characters!
+        </div>
+        <div *ngIf="userForm.get('description').errors?.maxlength">
+          The description can't have more than 500 characters.
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <button type="button"
+          class="btn btn-outline-dark"
+          *ngIf="!userForm"
+          (click)="edit()">Edit</button>
+  <button type="button"
+          class="btn btn-outline-primary"
+          *ngIf="userForm"
+          [disabled]="userForm.invalid"
+          (click)="save(content)">Save</button>
+  <button type="button"
+          class="btn btn-outline-dark"
+          *ngIf="userForm"
+          (click)="cancel()">Cancel</button>
+</div>
+
+<ng-template #content let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Save changes?</h4>
+  </div>
+  <div class="modal-body">
+    <p>Are you sure? The changes can't be undone.</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button"
+            class="btn btn-outline-primary"
+            (click)="c('Save')">Save</button>
+    <button type="button"
+            class="btn btn-outline-dark"
+            (click)="d('Close')">Close</button>
+  </div>
+</ng-template>

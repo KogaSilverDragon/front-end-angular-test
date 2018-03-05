@@ -1,36 +1,67 @@
-<label for="user-filter">Filter by name</label>
-<input id ="user-filter"
-       type="text"
-       (input)="filterUsers()"
-       [(ngModel)]="filterName"/>
-<button type="button"
-        (click)="deleteSelectedUsers()"
-        [disabled]="!hasSelectedUsers()">Delete selected</button>
-<button type="button"
-        (click)="download()"
-        [disabled]="!hasSelectedUsers()">Download</button>
+<div class="container my-4">
+  <div class="bd-example-container-header">
+    <h2 class="mb-4">User list</h2>
+    <input id ="user-filter"
+           class="form-control"
+           type="text"
+           placeholder="Filter users"
+           (input)="filterUsers()"
+           [(ngModel)]="filterName"/>
+    <button type="button"
+            class="btn btn-danger"
+            (click)="deleteSelectedUsers()"
+            [disabled]="!hasSelectedUsers()">Delete selected</button>
+    <button type="button"
+            class="btn btn-primary"
+            (click)="download()"
+            [disabled]="!hasSelectedUsers()">Download</button>
+  </div>
+  <div class="bd-example-container-body">
+    <table class="table table-striped">
+      <tr class="thead-dark">
+        <th scope="col">
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox"
+                   id="select-all"
+                   class="custom-control-input"
+                   [(ngModel)]="selectAll"
+                   (click)="toggleSelectAll()"/>
+            <label class="custom-control-label" for="select-all"></label>
+          </div>
+        </th>
+        <th scope="col">Name</th>
+        <th scope="col">Actions</th>
+      </tr>
+      <tr class="user-list-row"
+          *ngFor="let user of userList$ | async">
+        <td>
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox"
+                   class="custom-control-input"
+                   id="select-{{user.id}}"
+                   (change)="updateSelectAll()"
+                   [(ngModel)]="user.selected"/>
+            <label class="custom-control-label"
+                   for="select-{{user.id}}"></label>
+          </div>
+        </td>
+        <td>{{user.firstName}} {{user.lastName}}</td>
+        <td>
+          <button type="button"
+                  class="btn btn-primary"
+                  (click)="showUser(user)">Show</button>
+          <button type="button"
+                  class="btn btn-danger"
+                  (click)="deleteUser(user)">Delete</button>
+        </td>
+      </tr>
+    </table>
 
-<table class="user-list">
-  <tr class="user-list-header">
-    <th>
-      <input type="checkbox"
-             [(ngModel)]="selectAll"
-             (click)="toggleSelectAll()"/>
-    </th>
-    <th>Name</th>
-    <th>Actions</th>
-  </tr>
-  <tr class="user-list-row"
-      *ngFor="let user of userList$ | async">
-    <td>
-      <input type="checkbox"
-             (change)="updateSelectAll()"
-             [(ngModel)]="user.selected"/>
-    </td>
-    <td>{{user.firstName}} {{user.lastName}}</td>
-    <td>
-      <span class="user-action" (click)="showUser(user)">Show</span> |
-      <span class="user-action" (click)="deleteUser(user)">Delete</span>
-    </td>
-  </tr>
-</table>
+    <div [ngPlural]="selectedUsersCount()">
+      <ng-template ngPluralCase="=0">No user selected</ng-template>
+      <ng-template ngPluralCase="one">1 user selected</ng-template>
+      <ng-template ngPluralCase="other">{{selectedUsersCount()}} users selected</ng-template>
+    </div>
+  </div>
+</div>
+

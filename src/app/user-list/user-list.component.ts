@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {Router} from "@angular/router";
-import {User} from "../app.component";
-import {UserService} from "../user.service";
-import {Observable, Subject} from "rxjs";
+import {Router} from '@angular/router';
+import {User} from '../app.component';
+import {UserService} from '../user.service';
+import {Observable, Subject} from 'rxjs';
 
 @Component({
   selector: 'user-list',
@@ -12,8 +12,8 @@ import {Observable, Subject} from "rxjs";
 export class UserListComponent implements OnInit {
   private userList: User[] = [];
   userList$: Observable<User[]>;
-  selectAll: boolean = false;
-  filterName: string = '';
+  selectAll = false;
+  filterName = '';
   filterName$: Subject<string> = new Subject<string>();
 
   constructor(private router: Router,
@@ -77,24 +77,27 @@ export class UserListComponent implements OnInit {
     this.filterUsers();
   }
 
+  selectedUsersCount(): number {
+    return this.userList.filter(user => user.selected).length;
+  }
+
   hasSelectedUsers(): boolean {
     return this.userList.some(user => user.selected);
   }
 
   download(): void {
-    let users: User[] = this.userList.filter(user => user.selected);
-    const filename: string = 'users.json';
+    const users: User[] = this.userList.filter(user => user.selected);
+    const filename = 'users.json';
     if (!users.length) { return; }
 
-    let blob = new Blob([JSON.stringify(users)], {type: 'application/json'});
-    let e = document.createEvent('MouseEvents');
-    let a = document.createElement('a');
+    const blob = new Blob([JSON.stringify(users)], {type: 'application/json'});
+    const e = document.createEvent('MouseEvents');
+    const a = document.createElement('a');
 
     // FOR IE:
     if (window.navigator && window.navigator.msSaveOrOpenBlob) {
       window.navigator.msSaveOrOpenBlob(blob, filename);
-    }
-    else{
+    } else {
       a.download = filename;
       a.href = window.URL.createObjectURL(blob);
       a.dataset.downloadurl = ['application/json', a.download, a.href].join(':');
