@@ -6,6 +6,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
+  selector: 'user-info',
   templateUrl: './user-info.component.html',
   styleUrls: ['./user-info.component.scss']
 })
@@ -62,7 +63,10 @@ export class UserInfoComponent implements OnInit {
   }
 
   save(content): void {
-    this.modalService.open(content).result.then((result) => {
+    this.modalService.open(
+      content,
+      { windowClass: 'user-info--confirm-modal' }
+    ).result.then((result) => {
       console.log(result);
       Object.keys(this.userForm.value).forEach(key => {
         this.user[key] = this.userForm.value[key];
@@ -76,6 +80,10 @@ export class UserInfoComponent implements OnInit {
 
   cancel(): void {
     this.userForm = null;
+  }
+
+  back() {
+    this.router.navigate(['/']);
   }
 
 }

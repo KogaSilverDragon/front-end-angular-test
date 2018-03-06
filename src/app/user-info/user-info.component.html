@@ -1,8 +1,8 @@
 <div class="container my-4">
-  <div class="bd-example-container-header mb-4">
+  <div class="mb-4">
     <h2>User information</h2>
   </div>
-  <div class="bd-example-container-body"
+  <div class="container-body"
        *ngIf="!userForm">
     <ul class="list-unstyled">
       <li class="user-data-item">
@@ -24,7 +24,7 @@
     </ul>
   </div>
 
-  <div class="bd-example-container-body"
+  <div class="container-body"
        *ngIf="userForm">
     <form [formGroup]="userForm">
       <div class="form-group">
@@ -98,15 +98,23 @@
   </div>
 
   <button type="button"
-          class="btn btn-outline-dark"
+          id="user-edit"
+          class="btn btn-primary"
           *ngIf="!userForm"
           (click)="edit()">Edit</button>
   <button type="button"
+          id="user-back"
+          class="btn btn-outline-dark"
+          *ngIf="!userForm"
+          (click)="back()">Back</button>
+  <button type="button"
+          id="user-save"
           class="btn btn-outline-primary"
           *ngIf="userForm"
           [disabled]="userForm.invalid"
           (click)="save(content)">Save</button>
   <button type="button"
+          id="user-cancel"
           class="btn btn-outline-dark"
           *ngIf="userForm"
           (click)="cancel()">Cancel</button>
@@ -121,9 +129,11 @@
   </div>
   <div class="modal-footer">
     <button type="button"
+            id="user-confirm-save"
             class="btn btn-outline-primary"
             (click)="c('Save')">Save</button>
     <button type="button"
+            id="user-cancel-save"
             class="btn btn-outline-dark"
             (click)="d('Close')">Close</button>
   </div>

@@ -43,9 +43,11 @@
             <th scope="col">Actions</th>
           </tr>
           <tr class="user-list-row"
-              *ngFor="let user of userList$ | async">
+              *ngFor="let user of userList$ | async"
+              id="user-row-{{user.id}}">
             <td class="align-middle">
-              <div class="custom-control custom-checkbox">
+              <label class="custom-control custom-checkbox"
+                     for="select-{{user.id}}">
                 <input type="checkbox"
                        class="custom-control-input"
                        id="select-{{user.id}}"
@@ -53,18 +55,20 @@
                        [(ngModel)]="user.selected"/>
                 <label class="custom-control-label"
                        for="select-{{user.id}}"></label>
-              </div>
+              </label>
             </td>
-            <td class="align-middle">{{user.firstName}} {{user.lastName}}</td>
+            <td class="align-middle user-full-name">{{user.firstName}} {{user.lastName}}</td>
             <td>
               <div class="row">
                 <div class="col-sm-6 mb-2 align-middle">
                   <button type="button"
+                          id="view-{{user.id}}"
                           class="btn btn-primary w-100"
                           (click)="showUser(user)">Show</button>
                 </div>
                 <div class="col-sm-6 align-middle">
                   <button type="button"
+                          id="delete-{{user.id}}"
                           class="btn btn-danger w-100"
                           (click)="deleteUser(user)">Delete</button>
                 </div>

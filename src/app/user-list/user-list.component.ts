@@ -10,7 +10,8 @@ import {Observable, Subject} from 'rxjs';
   styleUrls: ['./user-list.component.scss']
 })
 export class UserListComponent implements OnInit {
-  private userList: User[] = [];
+  private _userList: User[] = [];
+  get userList(): User[] { return this._userList };
   userList$: Observable<User[]>;
   selectAll = false;
   filterName = '';
@@ -22,7 +23,7 @@ export class UserListComponent implements OnInit {
   ngOnInit() {
     this.userService.getUserList().toPromise().then(
       _userList => {
-        this.userList = _userList;
+        this._userList = _userList;
         this.filterUsers();
       },
       _error => console.log(_error)
@@ -31,10 +32,10 @@ export class UserListComponent implements OnInit {
     this.userList$ = this.filterName$
       .switchMap(name => {
         if (!name) {
-          return Observable.of<User[]>(this.userList);
+          return Observable.of<User[]>(this._userList);
         } else {
           return Observable.of<User[]>(
-            this.userList.filter(_user => {
+            this._userList.filter(_user => {
               return _user.firstName.toLowerCase().indexOf(name.toLowerCase()) != -1 ||
                      _user.lastName.toLowerCase().indexOf(name.toLowerCase()) != -1;
             })
@@ -47,11 +48,11 @@ export class UserListComponent implements OnInit {
   }
   toggleSelectAll(): void {
     this.selectAll = !this.selectAll;
-    this.userList.forEach(user => user.selected = this.selectAll);
+    this._userList.forEach(user => user.selected = this.selectAll);
   }
 
   updateSelectAll(): void {
-    this.selectAll = this.userList.every(user => user.selected);
+    this.selectAll = this._userList.every(user => user.selected);
   }
 
   filterUsers(): void {
@@ -67,26 +68,26 @@ export class UserListComponent implements OnInit {
   deleteUser(user: User): void {
     if (!user || !user.id) { return; }
     this.userService.removeUser(user);
-    this.userList = this.userList.filter(_user => _user.id !== user.id);
+    this._userList = this._userList.filter(_user => _user.id !== user.id);
     this.filterUsers();
   }
 
   deleteSelectedUsers(): void {
-    this.userService.removeUsers(this.userList.filter(user => user.selected));
-    this.userList = this.userList.filter(user => !user.selected);
+    this.userService.removeUsers(this._userList.filter(user => user.selected));
+    this._userList = this._userList.filter(user => !user.selected);
     this.filterUsers();
   }
 
   selectedUsersCount(): number {
-    return this.userList.filter(user => user.selected).length;
+    return this._userList.filter(user => user.selected).length;
   }
 
   hasSelectedUsers(): boolean {
-    return this.userList.some(user => user.selected);
+    return this._userList.some(user => user.selected);
   }
 
   download(): void {
-    const users: User[] = this.userList.filter(user => user.selected);
+    const users: User[] = this._userList.filter(user => user.selected);
     const filename = 'users.json';
     if (!users.length) { return; }
 
