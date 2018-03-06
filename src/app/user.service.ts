@@ -14,12 +14,14 @@ export class UserService {
 
   getUserList(): Observable<User[]> {
     if (!userListCache) {
-      console.log('No cache');
+      console.log('No cache.');
       return this.http.get<User[]>(environment.userListURL).map(_userList => {
+        console.log('Caching...');
         userListCache = _userList;
         return userListCache;
       });
     } else {
+      console.log('Getting list from cache.');
       return Observable.of(userListCache);
     }
   }
@@ -38,7 +40,6 @@ export class UserService {
   }
 
   updateUser(user: User): void {
-    console.log(userListCache);
       userListCache.some(_user => {
       if (_user.id === user.id) {
         _user = user;
@@ -47,7 +48,6 @@ export class UserService {
         return false;
       }
     });
-    console.log(userListCache);
   }
 
   removeUser(user: User): void {

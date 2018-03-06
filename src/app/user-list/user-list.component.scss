@@ -1,0 +1,19 @@
+@import "~bootstrap/scss/bootstrap";
+
+.table-cards-container {
+  -webkit-flex-grow: 1;
+  flex-grow: 1;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.card-body > label { cursor: pointer; }
+
+@include media-breakpoint-down(md) {
+  .table-container { display: none; }
+}
+
+@include media-breakpoint-up(lg) {
+  .cards-container { display: none; }
+}
